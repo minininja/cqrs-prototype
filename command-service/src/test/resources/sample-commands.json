@@ -1,0 +1,16 @@
+[
+  {
+    "@class":"org.dorkmaster.library.event.AddLocation",
+    "id": "7ceb0bc6-6339-4a96-adeb-8772ae322b98",
+    "createdBy": "mjackson",
+    "description": "office"
+  },
+  {
+    "@class":"org.dorkmaster.library.event.AddBook",
+    "locationId": "7ceb0bc6-6339-4a96-adeb-8772ae322b98",
+    "author": "John Scalzi",
+    "title": "Old Man's War",
+    "bookSellerId": "978-0765348272",
+    "createdBy": "mjackson"
+  }
+]

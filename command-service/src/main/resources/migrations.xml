@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+    <changeSet id="1" author="mjackson">
+        <createTable tableName="event">
+            <!-- an auto number gives us something nice to sort on, and is useful for getting the last X records -->
+            <column name="pk" type="int(12)" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <!-- events all have a UUID as their real id, but a number works better at the db level -->
+            <column name="id" type="varchar(255)" >
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <!-- not used by the code, but there for humans -->
+            <column name="created" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <!-- not used by the code, but there for humans -->
+            <column name="created_by" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <!-- serialized form of the event, contains all the details -->
+            <column name="content" type="clob">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="mjackson">
+        <createTable tableName="location">
+            <column name="id" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="description" type="clob">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3" author="mjackson">
+        <createTable tableName="book">
+            <column name="id" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="book_seller_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="author" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="location_id" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="4" author="mjackson">
+        <createTable tableName="materializer_status">
+            <column name="last_event_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

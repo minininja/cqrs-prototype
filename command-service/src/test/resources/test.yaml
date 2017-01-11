@@ -1,0 +1,39 @@
+# --------------------------------------------------------------------------------
+# the default logging configuration works quite nicely in most cases, but leave
+# this here in case we need to update it for local dev
+# --------------------------------------------------------------------------------
+logging:
+  level: INFO
+  loggers:
+    "org.skife.jdbi.v2": TRACE
+  appenders:
+  - type: console
+
+eventDb:
+  driverClass: org.hsqldb.jdbc.JDBCDriver
+  user: sa
+  password:
+  url: jdbc:hsqldb:file:/tmp/event/db;shutdown=true"
+#  url: jdbc:hsqldb:file:c:\\tmp\\event\\db
+  properties:
+    sql.syntax_mys: true
+  maxWaitForConnection: 1s
+  validationQuery: SELECT * FROM INFORMATION_SCHEMA.SYSTEM_TABLES
+  minSize: 8
+  maxSize: 32
+  checkConnectionWhileIdle: false
+  evictionInterval: 10s
+  minIdleTime: 1 minute
+  logValidationErrors: true
+
+swagger:
+  resourcePackage: org.dorkmaster.library.api
+
+server:
+  applicationConnectors:
+    - type: http
+      port: 8080
+
+  adminConnectors:
+    - type: http
+      port: 8081
