@@ -1,0 +1,40 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+
+    defaultConfig {
+        applicationId "org.dorkmaster.library.app.library"
+        minSdkVersion 18
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+//    useLibrary 'org.apache.http.legacy'
+}
+
+dependencies {
+    // https://mvnrepository.com/artifact/com.google.zxing/android-integration
+    compile group: 'com.google.zxing', name: 'android-integration', version: '3.2.1'
+
+    // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient
+//    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.2'
+
+    // https://mvnrepository.com/artifact/com.loopj.android/android-async-http
+//    compile group: 'com.loopj.android', name: 'android-async-http', version: '1.4.4'
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.8.6'
+
+    compile group: 'org.apache.httpcomponents' , name: 'httpclient-android' , version: '4.3.5'
+
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:25.1.0'
+}

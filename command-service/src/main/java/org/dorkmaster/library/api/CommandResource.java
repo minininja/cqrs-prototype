@@ -1,16 +1,20 @@
 package org.dorkmaster.library.api;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.Api;
 import org.dorkmaster.library.event.Event;
 import org.dorkmaster.library.service.CommandService;
 
+import javax.servlet.ServletContext;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import java.util.Collection;
 
 @Api
@@ -24,7 +28,7 @@ public class CommandResource {
     }
 
     @PUT
-    public Collection<Event> submitCommand(Collection<Event> events) {
+    public Collection<Event> submitCommand(@Context ServletContext context, Collection<Event> events) {
         return service.addEvents(events);
     }
 
