@@ -18,8 +18,8 @@ public class Main {
         // TODO move this stuff into a config file
         ds.setDriverClassName("com.mysql.jdbc.Driver");
         ds.setUrl("jdbc:mysql://localhost/library?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull");
-        ds.setUsername("library");
-        ds.setPassword("");
+        ds.setUsername(System.getProperty("db.user"));
+        ds.setPassword(System.getProperty("db.passwd"));
 //        ds.setDriverClassName("org.hsqldb.jdbc.JDBCDriver");
 //        ds.setUrl("jdbc:hsqldb:file:/tmp/event/db;shutdown=true");
 //        ds.setUsername("sa");

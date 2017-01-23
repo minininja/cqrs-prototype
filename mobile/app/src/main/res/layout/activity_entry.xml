@@ -15,36 +15,66 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Book Seller Id"
-                android:id="@+id/textView"/>
-        <EditText
+        <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/editText"/>
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Location Id"
-                android:id="@+id/textView2"/>
-        <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/editText2"/>
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Service URL"
-                android:id="@+id/textView3"/>
-        <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/editText3" android:text="http://10.0.0.209:8080/"/>
+                android:layout_height="wrap_content">
+            <TextView
+                    android:layout_width="200px"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="ISBN"
+                    android:id="@+id/textView" android:textAlignment="textEnd" android:textColor="#011c7e"/>
+            <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/isbnField" android:layout_gravity="center_horizontal"/>
+        </LinearLayout>
+        <LinearLayout android:orientation="horizontal" android:layout_width="match_parent"
+                          android:layout_height="wrap_content">
+            <TextView android:layout_width="200px" android:layout_height="wrap_content"
+                      android:textAppearance="?android:attr/textAppearanceMedium" android:text="Title" android:textAlignment="textEnd" android:textColor="#011c7e"
+                      android:id="@+id/textView2"/>
+            <EditText android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/titleField"
+                      android:layout_gravity="center_horizontal"/>
+        </LinearLayout>
+        <LinearLayout android:orientation="horizontal" android:layout_width="match_parent"
+                      android:layout_height="wrap_content">
+            <TextView android:layout_width="200px" android:layout_height="wrap_content"
+                      android:textAppearance="?android:attr/textAppearanceMedium" android:text="Author" android:textAlignment="textEnd" android:textColor="#011c7e"
+                      android:id="@+id/textView3"/>
+            <EditText android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:id="@+id/authorField" android:layout_gravity="center_horizontal"/>
+        </LinearLayout>
+        <LinearLayout android:orientation="horizontal" android:layout_width="match_parent"
+                              android:layout_height="wrap_content">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:textAppearance="?android:attr/textAppearanceMedium" android:id="@+id/textView5"/>
+        </LinearLayout>
+        <LinearLayout android:orientation="horizontal" android:layout_width="match_parent"
+                      android:layout_height="wrap_content">
+            <TextView android:layout_width="200px" android:layout_height="wrap_content"
+                      android:textAppearance="?android:attr/textAppearanceMedium" android:text="Location" android:textAlignment="textEnd" android:textColor="#011c7e"
+                      android:id="@+id/textView4"/>
+            <EditText android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:id="@+id/locationField" android:layout_gravity="center_horizontal"
+                      android:text="90da73cd-b757-40b5-b76f-367aa81575d2"/>
+        </LinearLayout>
+        <LinearLayout android:orientation="horizontal" android:layout_width="match_parent"
+                      android:layout_height="wrap_content">
+            <TextView android:layout_width="200px" android:layout_height="wrap_content"
+                      android:textAppearance="?android:attr/textAppearanceMedium" android:text="Service"
+                      android:id="@+id/textView6" android:textAlignment="textEnd" android:textColor="#011c7e"/>
+            <EditText android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:id="@+id/urlField" android:layout_gravity="center_horizontal"
+                      android:text="http://10.0.0.209:8080"/>
+        </LinearLayout>
+        <LinearLayout android:orientation="horizontal" android:layout_width="match_parent"
+                      android:layout_height="wrap_content">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:textAppearance="?android:attr/textAppearanceMedium"
+                      android:id="@+id/spacer"/>
+        </LinearLayout>
         <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -52,21 +82,18 @@
             <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Scan Book"
-                    android:id="@+id/button"
-                    android:onClick="addScanBook"/>
+                    android:text="ScanBook"
+                    android:id="@+id/button" android:onClick="addScanBook"/>
             <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Scan Location"
-                    android:id="@+id/button2"
-                    android:onClick="addScanLocation"/>
+                    android:text="ScanLocation"
+                    android:id="@+id/button2" android:onClick="addScanLocation"/>
             <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Add Book"
-                    android:id="@+id/button3"
-                    android:onClick="addBook"/>
+                    android:text="AddBook"
+                    android:id="@+id/button3" android:onClick="addBook"/>
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

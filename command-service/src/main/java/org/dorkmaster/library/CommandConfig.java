@@ -23,6 +23,10 @@ public class CommandConfig extends Configuration {
         return eventDb;
     }
 
+    @NotNull
+    @JsonProperty("libraryThingApiKey")
+    public String libraryThingApiKey;
+
     @JsonProperty("swagger")
     public SwaggerBundleConfiguration swaggerBundleConfiguration;
 }

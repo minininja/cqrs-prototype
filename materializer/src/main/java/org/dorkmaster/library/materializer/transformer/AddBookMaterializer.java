@@ -1,5 +1,6 @@
 package org.dorkmaster.library.materializer.transformer;
 
+import org.apache.commons.lang3.StringUtils;
 import org.dorkmaster.library.event.AddBook;
 import org.dorkmaster.library.event.Event;
 import org.dorkmaster.library.materializer.Materializer;
@@ -19,7 +20,8 @@ public abstract class AddBookMaterializer implements Materializer, GetHandle {
     @Override
     public void process(Event event) {
         AddBook ab = (AddBook) event;
-
-        dao().addBook(ab.getId(), ab.getBookSellerId(), ab.getTitle(), ab.getAuthor(), ab.getLocationId());
+        if (StringUtils.isNotBlank(ab.getBookSellerId())) {
+            dao().addBook(ab.getId(), ab.getBookSellerId(), ab.getTitle(), ab.getAuthor(), ab.getLocationId());
+        }
     }
 }

@@ -9,20 +9,14 @@ import android.view.View;
 import android.widget.EditText;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.ProtocolException;
-import java.net.URL;
-import java.util.UUID;
+import org.dorkmaster.library.app.library.event.AddBookEvent;
+import org.dorkmaster.library.app.library.service.LibraryService;
 
 public class EntryActivity extends AppCompatActivity {
-    private final static String EAN_13 = "EAN_13";
-
+    LibraryService service = new LibraryService();
+    private int scanned = -1;
+    private final static int BOOK = 1;
+    private final static int LOCATION = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,44 +28,53 @@ public class EntryActivity extends AppCompatActivity {
     }
 
     public void clearBook() {
-        ((EditText) findViewById(R.id.editText)).setText("");
+        ((EditText) findViewById(R.id.isbnField)).setText("");
     }
 
     public void addScanBook(View view) {
+        scanned = BOOK;
         IntentIntegrator ii = new IntentIntegrator(this);
-        ii.initiateScan();
+        ii.addExtra("TRY_HARDER", "ON");
+        ii.addExtra("SCAN_MODE", "UPC_EAN_EXTENSION");
+        ii.initiateScan(IntentIntegrator.PRODUCT_CODE_TYPES);
     }
 
+//    private void showDialog(int title, CharSequence message) {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setTitle(title);
+//        builder.setMessage(message);
+//        builder.setPositiveButton(R.string.ok_button, null);
+//        builder.show();
+//    }
+
+    // networkTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, query, isbn);
+
     public void addScanLocation(View view) {
+        scanned = LOCATION;
         IntentIntegrator ii = new IntentIntegrator(this);
         ii.initiateScan();
     }
 
     public void addBook(View view) {
-        String url = ((EditText) findViewById(R.id.editText3)).getText().toString();
+        String url = ((EditText) findViewById(R.id.urlField)).getText().toString();
         url = url + (url.endsWith("/") ? "cmd" : "/cmd");
 
         String json = makeAddBookEvent(
-                ((EditText) findViewById(R.id.editText)).getText().toString(),
-                ((EditText) findViewById(R.id.editText2)).getText().toString()
+                ((EditText) findViewById(R.id.isbnField)).getText().toString(),
+                ((EditText) findViewById(R.id.locationField)).getText().toString()
         );
-
-        new AsyncAddBook().doInBackground(url, json);
+        if (null != json) {
+            new AsyncAddBook().doInBackground(url, json);
+        }
     }
 
     private String makeAddBookEvent(String bookSellerId, String locationId) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("[{")
-                    .append("\"bookSellerId\":\"").append(bookSellerId).append("\",")
-                    .append("\"locationId\":\"").append(locationId).append("\",")
-                    .append("\"@class\":\"org.dorkmaster.library.event.AddBook\",")
-                    .append("\"createdBy\":\"mjackson\",")
-                    .append("\"created\":").append(System.currentTimeMillis()).append(",")
-                    .append("\"id\":\"").append(UUID.randomUUID().toString()).append("\"")
-            .append("}]");
-        return sb.toString();
+        AddBookEvent event = new AddBookEvent();
+        event.bookSellerId = bookSellerId;
+        event.locationId = locationId;
+        event = service.lookupDetails(((EditText) findViewById(R.id.urlField)).getText().toString(), event);
+        return null != event ? event.toJson() : null;
     }
-
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
@@ -79,53 +82,50 @@ public class EntryActivity extends AppCompatActivity {
             EditText et;
 
             String format = scanResult.getFormatName();
-            if (EAN_13.equals(format)) {
-                et = (EditText) findViewById(R.id.editText);
-                et.setText(scanResult.getContents());
-            } else {
-                // must be the location
-                et = (EditText) findViewById(R.id.editText2);
-                et.setText(scanResult.getContents());
+            switch (scanned) {
+                case BOOK :
+                    et = (EditText) findViewById(R.id.isbnField);
+                    et.setText(scanResult.getContents());
+                    new AsyncLookupBook().doInBackground(((EditText) findViewById(R.id.urlField)).getText().toString(), scanResult.getContents());
+                    break;
+                case LOCATION:
+                    et = (EditText) findViewById(R.id.locationField);
+                    et.setText(scanResult.getContents());
+                    break;
             }
         }
         // else continue with any other code you need in the method
         //    ...
     }
 
+    class AsyncLookupBook extends AsyncTask<String, Void, Void> {
+        @Override
+        protected Void doInBackground(String... params) {
+            String requestUrl = params[0];
+            String isbn = params[1];
+
+            AddBookEvent event = new AddBookEvent();
+            event.bookSellerId = params[1];
+            service.lookupDetails(requestUrl, event);
+
+            EditText title = (EditText) findViewById(R.id.titleField);
+            title.setText(event.title);
+            EditText author = (EditText) findViewById(R.id.authorField);
+            author.setText(event.author);
+
+            return null;
+        }
+    }
+
     class AsyncAddBook extends AsyncTask<String, Void, Void> {
         @Override
         protected Void doInBackground(String... params) {
             String requestUrl = params[0];
-            byte[] json = params[1].getBytes();
+            String json = params[1];
 
-            try {
-                URL url = new URL(requestUrl);
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                try {
-                    urlConnection.setDoOutput(true);
-                    urlConnection.setChunkedStreamingMode(0);
-                    urlConnection.setRequestMethod("PUT");
-                    urlConnection.setRequestProperty("Content-type","application/json");
-                    OutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
-                    out.write(json);
-                    out.flush();
+//            service.submitEvents(requestUrl, json);
+//            clearBook();
 
-                    InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-                    byte[] buf = new byte[1024 * 1024];
-                    int size = in.read(buf);
-                    String result = new String(buf);
-                    result = "result: " + result;
-                    clearBook();
-                } catch (ProtocolException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    urlConnection.disconnect();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
             return null;
         }
     }

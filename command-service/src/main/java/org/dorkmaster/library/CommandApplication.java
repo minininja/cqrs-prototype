@@ -9,6 +9,7 @@ import io.dropwizard.setup.Environment;
 import io.federecio.dropwizard.swagger.SwaggerBundle;
 import io.federecio.dropwizard.swagger.SwaggerBundleConfiguration;
 import org.dorkmaster.library.api.CommandResource;
+import org.dorkmaster.library.api.LookupResource;
 import org.dorkmaster.library.api.QueryResource;
 import org.dorkmaster.library.jdbi.query.BookDao;
 import org.dorkmaster.library.jdbi.query.LocationDao;
@@ -52,5 +53,6 @@ public class CommandApplication extends Application<CommandConfig> {
         CommandService service = jdbi.onDemand(CommandService.class);
         environment.jersey().register(new CommandResource(service));
         environment.jersey().register(new QueryResource(jdbi.onDemand(LocationDao.class), jdbi.onDemand(BookDao.class)));
+        environment.jersey().register(new LookupResource(configuration));
     }
 }

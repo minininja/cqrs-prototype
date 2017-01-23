@@ -28,7 +28,7 @@ public class CommandResource {
     }
 
     @PUT
-    public Collection<Event> submitCommand(@Context ServletContext context, Collection<Event> events) {
+    public Collection<Event> submitCommand(Collection<Event> events) {
         return service.addEvents(events);
     }
 
